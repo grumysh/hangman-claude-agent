@@ -2,6 +2,10 @@
 
 Juego de ahorcado con la API de Claude.
 
+## Demo
+
+[![Claude juega al ahorcado](https://img.youtube.com/vi/b0GYiaEoQF0/hqdefault.jpg)](https://youtu.be/b0GYiaEoQF0)
+
 ## Requisitos
 
 - Python 3.10 o superior (probado con 3.15)
