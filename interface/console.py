@@ -5,6 +5,10 @@ def show_turn(turn, move, correct, game):
     print(f"  {game.board()}   intentos restantes: {game.attempts}\n")
 
 
+def show_separator():
+    print("=" * 50 + "\n")
+
+
 def show_result(game, turns):
     if game.won():
         print(f"Claude adivinó la palabra '{game.word}' en {turns} turnos.")

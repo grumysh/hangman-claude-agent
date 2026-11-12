@@ -3,17 +3,27 @@ import streamlit as st
 from agent.player import ask_move, load_skill
 from config import ATTEMPTS, SKILL
 from game.hangman import Hangman
+from interface.console import show_separator, show_turn
+from interface.drawing import hangman_svg
+
+
+def show_board(board, game):
+    color = "white" if st.context.theme.type == "dark" else "black"
+    with board.container():
+        st.markdown(f"## `{game.board()}`\nIntentos restantes: {game.attempts}")
+        st.image(hangman_svg(ATTEMPTS - game.attempts, color))
+
 
 st.title("Ahorcado con Claude")
 
-word = st.text_input("Escribe la palabra a adivinar", type="password")
+word = st.text_input("Escribe la palabra a adivinar")
 
 if st.button("Jugar", disabled=not word):
     game = Hangman(word, ATTEMPTS)
     system = load_skill(SKILL)
 
     board = st.empty()
-    board.markdown(f"## `{game.board()}`\nIntentos restantes: {game.attempts}")
+    show_board(board, game)
 
     turn = 0
     while not game.won() and not game.lost():
@@ -22,10 +32,10 @@ if st.button("Jugar", disabled=not word):
             move = ask_move(system, game)
         correct = game.guess(move["guess"])
 
-        board.markdown(f"## `{game.board()}`\nIntentos restantes: {game.attempts}")
-        result = ":green[acierto]" if correct else ":red[fallo]"
-        st.markdown(f"**Turno {turn}:** `{move['guess']}` → {result}")
-        st.caption(move["reasoning"])
+        show_board(board, game)
+        show_turn(turn, move, correct, game)
+
+    show_separator()
 
     if game.won():
         st.success(f"Claude adivinó la palabra '{game.word}' en {turn} turnos.")
